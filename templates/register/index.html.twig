@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User Registartion{% endblock %}
+
+{% block body %}
+<form action="/register" method="post" enctype="multipart/form-data">
+  <h1>Registration page</h1>
+  <dl>
+    <dt><label for="first_name">Enter your first name</label></dt>
+    <dd>
+      <input type="text" name="first_name" id="first_name" required onblur="checkFname()"
+      placeholder="Enter your first name"
+      value="{% if userfname is defined %}{{ userfname }}{% endif %}"
+      >
+    </dd>
+    <dd id="invalid_fname" class="error-msg"></dd>
+    <dd class="error-msg"></dd>
+    <dt><label for="last_name">Enter your last name</label></dt>
+    <dd>
+      <input type="text" name="last_name" id="last_name" required onblur="checkLname()"
+      placeholder="Enter your last name"
+      value="{% if userlname is defined %}{{ userlname }}{% endif %}"
+      >
+    </dd>
+    <dd id="invalid_lname" class="error-msg"></dd>
+    <dd class="error-msg"></dd>
+    <dt><label for="pwd">Enter your password</label></dt>
+    <dd>
+      <input type="password" name="user_password" id="pwd" required onblur="checkPasswordStatus()"
+      placeholder="Enter your password"
+      value="{% if password is defined %}{{ password }}{% endif %}"
+      >
+    </dd>
+    <dd id="pwd_success" class="success-msg"></dd>
+    <dd id="pwd_status" class="error-msg"></dd>
+    <dd class="error-msg"></dd>
+    <dt><label for="mobile">Enter your mobile</label></dt>
+    <dd>
+      <input type="text" name="user_mobile" id="mobile" required onblur="checkPhoneNo()"
+      placeholder="Enter your mobile no"
+      value="{% if usermobile is defined %}{{ usermobile }}{% endif %}"
+      >
+    </dd>
+    <dd id="invalid_mobile" class="error-msg"></dd>
+    <dd class="error-msg">
+      {% if mobileError is defined %}{{ mobileError }}{% endif %}
+    </dd>
+    <dt><label for="email">Enter your email</label></dt>
+    <dd>
+      <input type="text" name="user_email" id="email" required onblur="checkEmailStatus()"
+      placeholder="Enter your email"
+      value="{% if useremail is defined %}{{ useremail }}{% endif %}"
+      >
+    </dd>
+    <dd id="email_success" class="success-msg"></dd>
+    <dd id="email_status" class="error-msg"></dd>
+    <dd class="error-msg">
+      {% if emailError is defined %}{{ emailError }}{% endif %}
+    </dd>
+    <dt>Upload your img</dt>
+    <dd>
+      <input type="file" name="user_img" id="user_img" required>
+    </dd>
+    <dd class="error-msg"></dd>
+    <dd class="input-group">
+      <span class="pe-2">
+        <input type="checkbox" class="form-check p-3" name="cookie_status" id="cookieStatus" value="Accepted">
+      </span>
+      <span>Are you agree with our <a href="#">Term and Condition</a></span>
+    </dd>
+
+    <dd>
+      <button name="submitRegistration" id="submitBtn" onclick="checkedCookie()">Register</button>
+    </dd>
+    <dd>
+      <a href="/login">Exiting user?</a>
+    </dd>
+  </dl>
+</form>
+{% endblock %}

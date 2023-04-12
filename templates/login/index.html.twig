@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User Login{% endblock %}
+
+{% block body %}
+<form action="/login" method="post">
+  <h1>User Login-Page</h1>
+  <dl>
+    <dt>Enter User-Email</dt>
+    <dd>
+      <input type="text" name="useremail" id="email" placeholder="Enter User-Email" required onblur="checkEmailStatus()"
+      value = "{% if useremail is defined %}{{ useremail }}{% endif %}">
+    </dd>
+    <dd id="email_success" class="success-msg"></dd>
+    <dd id="email_status" class="error-msg"></dd>
+    <dd class="error-msg"></dd>
+    <dt>Enter User-Password</dt>
+    <dd>
+      <input type="password" name="userpassword" id="pwd" placeholder="Enter User-Password" required onblur="checkPasswordStatus()"
+      value = "{% if userepassword is defined %}{{ userpassword }}{% endif %}"
+      >
+    </dd>
+    <dd id="pwd_success" class="success-msg"></dd>
+    <dd id="pwd_status" class="error-msg"></dd>
+    <dd class="error-msg"></dd>
+    <dd>
+      <a href="/reset">Reset password!</a>
+    </dd>
+
+    <dd>
+      <button name="submitLogin" id="submitBtn">Login</button>
+    </dd>
+    <dd>
+      <a href="/register">New user?</a>
+    </dd>
+  </dl>
+</form>
+{% endblock %}
