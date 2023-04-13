@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User Login{% endblock %}
+{% block title %}User-Login{% endblock %}
 
 {% block body %}
 <form action="/login" method="post">
@@ -13,16 +13,20 @@
     </dd>
     <dd id="email_success" class="success-msg"></dd>
     <dd id="email_status" class="error-msg"></dd>
-    <dd class="error-msg"></dd>
+    <dd class="error-msg">
+      {% if invalidEmail is defined %}{{ invalidEmail }}{% endif %}
+    </dd>
     <dt>Enter User-Password</dt>
     <dd>
       <input type="password" name="userpassword" id="pwd" placeholder="Enter User-Password" required onblur="checkPasswordStatus()"
-      value = "{% if userepassword is defined %}{{ userpassword }}{% endif %}"
+      value = "{% if userpassword is defined %}{{ userpassword }}{% endif %}"
       >
     </dd>
     <dd id="pwd_success" class="success-msg"></dd>
     <dd id="pwd_status" class="error-msg"></dd>
-    <dd class="error-msg"></dd>
+    <dd class="error-msg">
+      {% if invalidPassword is defined %}{{ invalidPassword }}{% endif %}
+    </dd>
     <dd>
       <a href="/reset">Reset password!</a>
     </dd>

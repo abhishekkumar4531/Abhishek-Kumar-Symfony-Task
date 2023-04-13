@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class RegisterController extends AbstractController {
 	#[Route('/register', name: 'app_register', methods:['GET', 'HEAD', 'POST'])]
@@ -15,7 +16,7 @@ class RegisterController extends AbstractController {
 	 *
 	 * @return Response
 	 */
-	public function index(EntityManagerInterface $entityManager): Response {
+	public function index(EntityManagerInterface $entityManager, Request $request): Response {
 		/**
 		 * When user will submit the registartion form then first below statement will be execute.
 		 * First validating all the input data then also validate the image type.
@@ -48,8 +49,11 @@ class RegisterController extends AbstractController {
 				move_uploaded_file($imgTmp, "assets/uploads/". $imgName);
 				$userImage = "assets/uploads/". $imgName;
 				$verify = $entityManager->getRepository(Users::class);
+				//Creating object of @USers class and checking the is email already available?
 				$checkEmail = $verify->findOneBy([ 'userEmail' => $userEmail ]);
+				//Creating object of @USers class and checking the is mobile number already available?
 				$checkMobile = $verify->findOneBy(['userMobile' => $userMobile]);
+				//If $checkEmail and $checkMobile both will return null then only this statement will be execute.
 				if(!$checkEmail && !$checkMobile) {
 					$users = new Users();
 					$users->setUserFirstName($userFirstName);
@@ -105,13 +109,16 @@ class RegisterController extends AbstractController {
 		 * If user is not logged in then registartion page will be open.
 		 */
     else {
-			if(isset($_SESSION['user_loggedin'])) {
-				return $this->redirectToRoute('app_home');
-			}
-			else {
-				//return $this->redirectToRoute('app_login');
-				return $this->render('register/index.html.twig', []);
-			}
+			//session_start();
+			$session = $request->getSession();
+      if($session->get('user_loggedin')) {
+        return $this->redirectToRoute('app_home');
+      }
+      else {
+        //session_destroy();
+        $session->invalidate();
+        return $this->render('register/index.html.twig', []);
+      }
     }
 	}
 

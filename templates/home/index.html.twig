@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello HomeController!{% endblock %}
-
+{% block regLink %}edit{% endblock %}
+{% block regName %}Edit profile{% endblock %}
+{% block loginLink %}logout{% endblock %}
+{% block loginValue %}Logout{% endblock %}
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
@@ -9,7 +12,6 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
 
     This friendly message is coming from:
     <ul>
