@@ -1,22 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}Home-Page{% endblock %}
+{% block loadMore %}assets/js/loadMore.js{% endblock %}
 {% block regLink %}edit{% endblock %}
 {% block regName %}Edit profile{% endblock %}
 {% block loginLink %}logout{% endblock %}
 {% block loginValue %}Logout{% endblock %}
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/task/symfony/root/src/Controller/HomeController.php'|file_link(0) }}">src/Controller/HomeController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/task/symfony/root/templates/home/index.html.twig'|file_link(0) }}">templates/home/index.html.twig</a></code></li>
-    </ul>
+<div class = "welcome-user">
+	<h5>Welcome back {% if userFirstName is defined %}{{ userFirstName }}{% endif %}</h5>
 </div>
+<div class = "home-page">
+	<div class="post-container">
+		<div class="post-container-display">
+			<div class="current-user-picture">
+				<img src="/{% if userImage is defined %}{{ userImage }}{% endif %}" alt=""
+				width="100" height="100">
+			</div>
+			<div class="post-container-content">
+				<form action="/home/post" method="post" enctype="multipart/form-data">
+					<div class="upload-container">
+						<div class="upload-container-textarea">
+							<textarea name="newPost" id="newPost" cols="90" rows="5"
+							placeholder="What's in your mind!" required></textarea>
+						</div>
+						<div class="upload-container-button">
+							<div>
+								<input type="file" name="newFile" id="newImage"
+								class="custom-file-input form-control w-50" required>
+							</div>
+							<div>
+								<button name="uploaded">POST</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="user-post-container">
+	<div class="post-display" id="post-display"></div>
+</div>
+<div class="text-center p-2">
+	<button class="w-100 p-3" name="loadBtn" id="loadMore">Load More</button>
+</div>
+
 {% endblock %}

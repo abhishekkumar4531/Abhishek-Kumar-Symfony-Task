@@ -57,6 +57,7 @@ class ResetController extends AbstractController
       }
     }
     else if(isset($_POST['resetPwd'])) {
+      //Fetching all the input values from Reset password form
       $userName = $_POST['userName'];
       $enterOtp = $_POST['enterOtp'];
       $newPassword = $_POST['newPassword'];

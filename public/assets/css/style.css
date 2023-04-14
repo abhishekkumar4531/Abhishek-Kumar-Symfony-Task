@@ -108,7 +108,9 @@ nav {
   font-size: 18px;
   font-weight: bold;
 }
-.home-page h5 {
+.welcome-user h5 {
+  position: relative;
+  left: -300px;
   text-align: center;
   font-size: 16px;
   width: 200px;
@@ -162,7 +164,6 @@ nav {
 }
 .post-container-display {
   display: flex;
-  flex-wrap: wrap;
 }
 .post_by_user a h6 {
   color: var(--fixed-color);

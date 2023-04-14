@@ -3,9 +3,10 @@ $(document).on('click','#getStarted',function(e){
 });
 
 $( document ).ready(function() {
+  alert("Start");
   $.ajax({
     type: "GET",
-    url: "/afterLogin/loadInitialContent",
+    url: "/home/load",
     dataType: "html",
     success: function(data){
       $("#post-display").html(data);
@@ -16,7 +17,7 @@ $( document ).ready(function() {
 $(document).on('click','#loadMore',function(e){
   $.ajax({
     type: "GET",
-    url: "/afterLogin/loadMoreContent",
+    url: "/home/load",
     dataType: "html",
     success: function(data){
       $("#post-display").html(data);
