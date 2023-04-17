@@ -22,44 +22,16 @@
       </div>
     </div>
 
-	  <div class="post-container">
-      <div class="post-container-display">
-        <div class="current-user-picture">
-          <img src="/{% if userImage is defined %}{{ userImage }}{% endif %}" alt=""
-          width="100" height="100">
-        </div>
-        <div class="post-container-content">
-          <form action="/home/post" method="post" enctype="multipart/form-data">
-            <div class="upload-container">
-              <div class="upload-container-textarea">
-                <textarea name="newPost" id="newPost" cols="90" rows="5"
-                placeholder="What's in your mind!" required></textarea>
-              </div>
-              <div class="upload-container-button">
-                <div>
-                  <input type="file" name="newFile" id="newImage"
-                  class="custom-file-input form-control w-50" required>
-                </div>
-                <div>
-                  <button name="upload">POST</button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-	  </div>
-
     <div class="user-post-container">
       <div class="post-display" id="post-display-personal">
         {% for post in fetchPosts %}
           <div class="card-display">
             <div class="post_by_user">
             <div>
-              <a href="home/profile/{{ userId }}">
+              <a href="">
                 <img src = "/{{ userImage }}" width = "200" height = "250">
               </a>
-              <a href="home/profile/{{ userId }}">
+              <a href="">
                 <h6>{{ userFirstName }} {{ userLastName }}</h6>
               </a>
               </div>

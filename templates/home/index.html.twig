@@ -10,6 +10,11 @@
 <div class = "welcome-user">
 	<h5>Welcome back {% if userFirstName is defined %}{{ userFirstName }}{% endif %}</h5>
 </div>
+<div class = "error-msg">
+	{% if errorMsg is defined %}
+		{{ errorMsg }}
+	{% endif %}
+</div>
 <div class = "home-page">
 	<div class="post-container">
 		<div class="post-container-display">
@@ -30,7 +35,7 @@
 								class="custom-file-input form-control w-50" required>
 							</div>
 							<div>
-								<button name="uploaded">POST</button>
+								<button name="upload">POST</button>
 							</div>
 						</div>
 					</div>

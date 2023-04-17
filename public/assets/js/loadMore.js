@@ -3,7 +3,6 @@ $(document).on('click','#getStarted',function(e){
 });
 
 $( document ).ready(function() {
-  alert("Start");
   $.ajax({
     type: "GET",
     url: "/home/load",
@@ -17,7 +16,7 @@ $( document ).ready(function() {
 $(document).on('click','#loadMore',function(e){
   $.ajax({
     type: "GET",
-    url: "/home/load",
+    url: "/home/loadmore",
     dataType: "html",
     success: function(data){
       $("#post-display").html(data);

@@ -9,46 +9,57 @@ use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class EditController extends AbstractController
-{
+/**
+ * EditController
+ * This class is extends with AbstractController
+ * When user wants to edit or update his/her information then this class will be called.
+ */
+class EditController extends AbstractController {
+
   #[Route('/edit', name: 'app_edit', methods: ['GET', 'POST', 'HEAD'])]
 
   /**
    * index
+   * index function is performing two type of operations,
+   * 1st operation : If user want to update/edit their information
+   * 2nd operation : If user want to just view their personal information
    *
    * @param  mixed $entityManager
    * @param  mixed $request
    * @return Response
    */
   public function index(EntityManagerInterface $entityManager, Request $request): Response {
-    /**
-     * When user submit the edit profile page then this block will be execute
-     */
+    //When user submit the edit/update form then if statement will be execute.
+    //It will fetch all the data from edit/update form and then update the form.
+    //If this function will called through link, url or using navbar then else
+    //statement will be execute.
     if(isset($_POST['updateBtn'])) {
-      //$userBio = $_POST['user_bio'];
-      //Start the session
       $session = $request->getSession();
-      //Fetch the user's Bio from form and filter using 'htmlspecialchars'
+
+      //Fetch the user's Bio from form and filter using 'htmlspecialchars'.
       $userBio = htmlspecialchars($_POST['user_bio'], ENT_QUOTES);
       $userFirstName = $_POST['first_name'];
       $userLastName = $_POST['last_name'];
       $userMobile = $_POST['user_mobile'];
       $userEmail = $_POST['user_email'];
-      //Fetch the user's earlier image which is store in session
+
+      //Fetch the user's earlier image which is store in session.
       $userImage = $session->get('user_image');
-      //If user want to update their profile then this condition will execute
+
+      //If user want to also update their image then this statement will be execute.
+      //It will check image type and then update the value of $userImage.
       if(!empty($_FILES['user_img']['name'])) {
         $imgName = $_FILES['user_img']['name'];
         $imgTmp = $_FILES['user_img']['tmp_name'];
         $imgType = $_FILES['user_img']['type'];
-        //If image type will be valid type then execute this statement
+
+        //To check the image type, if condotion will be satisfied then
+        //store the image in <uploads> folder.
+        //If condition will not be satisfied then redirect to edit/update page with error message.
         if($imgType == "image/png" || $imgType == "image/jpeg" || $imgType == "image/jpg") {
-          //Upload the user's image on uploads folder which is under the assets folder
           move_uploaded_file($imgTmp, "assets/uploads/". $imgName);
-          //Now change the $userImage value with user entered value.
           $userImage = "assets/uploads/". $imgName;
         }
-        //If image type will not be valid then redirect to home edit page with error message.
         else {
           return $this->render('edit/index.html.twig', [
             'userImage' => $userImage,
@@ -64,10 +75,9 @@ class EditController extends AbstractController
       $verify = $entityManager->getRepository(Users::class);
       //Creating object of @USers class and checking the is email already available?
       $checkEmail = $verify->findOneBy([ 'userEmail' => $userEmail ]);
-      /**
-       * If $checkEmail will be user's credential then only this statement will be execute.
-       * Update the all the updated feilds of user.
-       */
+
+      //If $checkEmail will be user's credential then only this statement will be execute.
+      //Update the all the updated feilds of user.
       if($checkEmail) {
         $checkEmail->setUserFirstName($userFirstName);
         $checkEmail->setUserLastName($userLastName);
@@ -75,28 +85,19 @@ class EditController extends AbstractController
         $checkEmail->setUserBio($userBio);
         $checkEmail->setUserImage($userImage);
         $entityManager->flush();
-        //Call the fetchUserProfile function for rendring on edit page with updated values.
         return $this->fetchUserProfile($verify, $request, $userEmail);
       }
-      //If somehow any type of error came then redirect to home page.
       else {
         return $this->redirectToRoute('app_home');
       }
     }
-    /**
-     * If controller get the request from another way the execute this one.
-     */
     else {
       $session = $request->getSession();
-      //If user logged in then this statement will be execute.
       if($session->get('user_loggedin')) {
-        //Fetch the userEmail of logged in user with the help of session
         $userEmail = $session->get('user_loggedin');
         $verify = $entityManager->getRepository(Users::class);
-        //Call the fetchUserProfile function for rendring on edit page with updated values.
         return $this->fetchUserProfile($verify, $request, $userEmail);
       }
-      //If user not login then redirect to login page.
       else {
         $session->invalidate();
         return $this->redirectToRoute('app_login');
@@ -107,21 +108,23 @@ class EditController extends AbstractController
   /**
    * fetchUserProfile
    * This function is communicates with database and also display user's credentials.
-   * First this fucntion will get the three varialble as a parameter
+   *
    * @param  mixed $verify
    * @param  mixed $request
    * @param  mixed $userEmail
    *
-   * After that it will be verify that the is $userEmail is exiting or not
-   * if existing then fetch all the user's credentials and
+   * It will be verify that the is $userEmail is exiting or not
+   * if exists then fetch all the user's credentials and
    * then render back to edit profile page with all the credentails.
    * @return void
    */
   private function fetchUserProfile($verify, $request, $userEmail) {
     $session = $request->getSession();
-    //Creating the object and fetching the user's info if user's entered email is exits.
     $fetchCredentials = $verify->findOneBy([ 'userEmail' => $userEmail ]);
-    //If $fetchCredentials will not return null that means user is exits, then only this statement will be execute.
+
+    //If $fetchCredentials will not return null that means user exits,
+    //then fetch all the data after that render to the edit profile page with values.
+    //If due to any reason $fetchCredentails return null then redirect to the home page.
     if($fetchCredentials) {
       $fetchImage = $fetchCredentials->getUserImage();
       $session->set('user_image', $fetchImage);

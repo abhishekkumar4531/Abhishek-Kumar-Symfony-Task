@@ -9,6 +9,9 @@ use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * RegisterController
+ */
 class RegisterController extends AbstractController {
 	#[Route('/register', name: 'app_register', methods:['GET', 'HEAD', 'POST'])]
 	/**
@@ -17,19 +20,14 @@ class RegisterController extends AbstractController {
 	 * @return Response
 	 */
 	public function index(EntityManagerInterface $entityManager, Request $request): Response {
-		/**
-		 * When user will submit the registartion form then first below statement will be execute.
-		 * First validating all the input data then also validate the image type.
-		 */
+		// When user will submit the registartion form then first below statement will be execute.
+		// First validating all the input data then also validate the image type.
 		if(isset($_POST['submitRegistration'])) {
 			$userFirstName = $_POST['first_name'];
 			$userLastName = $_POST['last_name'];
 			$userPassword = $_POST['user_password'];
 			$userMobile = $_POST['user_mobile'];
       $userEmail = $_POST['user_email'];
-			/**
-			 * Validate all the input data with the help of @textInput method.
-			 */
 			/*$userFirstName = $this->testInput($userFirstName);
 			$userLastName = $this->testInput($userLastName);
 			$userPassword = $this->testInput($userPassword);
@@ -49,11 +47,8 @@ class RegisterController extends AbstractController {
 				move_uploaded_file($imgTmp, "assets/uploads/". $imgName);
 				$userImage = "assets/uploads/". $imgName;
 				$verify = $entityManager->getRepository(Users::class);
-				//Creating object of @USers class and checking the is email already available?
 				$checkEmail = $verify->findOneBy([ 'userEmail' => $userEmail ]);
-				//Creating object of @USers class and checking the is mobile number already available?
 				$checkMobile = $verify->findOneBy(['userMobile' => $userMobile]);
-				//If $checkEmail and $checkMobile both will return null then only this statement will be execute.
 				if(!$checkEmail && !$checkMobile) {
 					$users = new Users();
 					$users->setUserFirstName($userFirstName);
@@ -91,7 +86,6 @@ class RegisterController extends AbstractController {
 					]);
 				}
 			}
-			//If image type will invalid then send back to the Registration page with error message
       else {
         return $this->render('register/index.html.twig', [
 					'userfname' => $userFirstName,
@@ -103,19 +97,12 @@ class RegisterController extends AbstractController {
 				]);
       }
     }
-		/**
-		 * if user randomly come to this page.
-		 * If user logged in then user will be redirected to the home page.
-		 * If user is not logged in then registartion page will be open.
-		 */
     else {
-			//session_start();
 			$session = $request->getSession();
       if($session->get('user_loggedin')) {
         return $this->redirectToRoute('app_home');
       }
       else {
-        //session_destroy();
         $session->invalidate();
         return $this->render('register/index.html.twig', []);
       }
