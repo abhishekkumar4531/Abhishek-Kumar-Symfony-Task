@@ -272,13 +272,19 @@ nav {
   bottom: 30px;
   left: -80px;
 }
-
-.cookie-policy {
-  position: fixed;
-  bottom: 10px;
+.user-identity img {
+  width: 180px;
+  height: 180px;
 }
-
-#cookies-policy-page {
-  background-color: var(--primary-color);
-  font-weight: bold;
+.dd-img img {
+  width: 100px;
+  height: 100px;
+}
+.current-user-picture img {
+  width: 100px;
+  height: 100px;
+}
+.post_by_user img {
+  width: 250px;
+  height: 200px;
 }

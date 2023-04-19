@@ -11,13 +11,13 @@
     <div class="user-identity mt-3">
       <div>
         <div class="user-identity">
-          <img src="/{{ userImage }}" alt="" width="180" height="180">
+          <img src="/{{ userData.userImage }}" alt="">
         </div>
         <h3>
-          {{ userFirstName }} {{ userLastName }}
+          {{ userData.userFirstName }} {{ userData.userLastName }}
         </h3>
         <p>
-          {{ userBio }}
+          {{ userData.userBio }}
         </p>
       </div>
     </div>
@@ -29,10 +29,10 @@
             <div class="post_by_user">
             <div>
               <a href="">
-                <img src = "/{{ userImage }}" width = "200" height = "250">
+                <img src = "/{{ userData.userImage }}" width = "200" height = "250">
               </a>
               <a href="">
-                <h6>{{ userFirstName }} {{ userLastName }}</h6>
+                <h6>{{ userData.userFirstName }} {{ userData.userLastName }}</h6>
               </a>
               </div>
             </div>

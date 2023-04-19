@@ -11,13 +11,13 @@
         <dt>Your Name</dt>
         <dd>
           <input type="text" name="userName" id="userName" readonly
-          value="{{ userName }}"
+          value="{{ userData.userName }}"
           >
         </dd>
         <dt>Enter OTP</dt>
         <dd>
           <input type="text" name="enterOtp" id="otp" required placeholder="Enter OTP"
-          value="{% if enteredOtp is defined %}{{ enteredOtp }}{% endif %}"
+          value="{% if userData.enteredOtp is defined %}{{ userData.enteredOtp }}{% endif %}"
           >
         </dd>
         <dd class="error-msg"></dd>
@@ -28,7 +28,7 @@
         <dd>
           <input type="password" name="newPassword" id="pwd" required
           onblur="checkPasswordStatus()" placeholder="Enter New Password"
-          value="{% if newPassword is defined %}{{ newPassword }}{% endif %}"
+          value="{% if userData.newPassword is defined %}{{ userData.newPassword }}{% endif %}"
           >
         </dd>
         <dd id="pwd_success" class="success-msg"></dd>
@@ -37,7 +37,7 @@
         <dd>
           <input type="password" name="cnfPassword" id="cnfPwd" required
           onblur="confirmPassword()" placeholder="Confirm Password"
-          value="{% if cnfPassword is defined %}{{ cnfPassword }}{% endif %}"
+          value="{% if userData.cnfPassword is defined %}{{ userData.cnfPassword }}{% endif %}"
           >
         </dd>
         <dd id="cnfPwd_status" class="error-msg"></dd>

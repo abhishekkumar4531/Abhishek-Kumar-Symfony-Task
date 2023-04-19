@@ -9,6 +9,10 @@ use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * LoginController
+ * This class is responsible for user login
+ */
 class LoginController extends AbstractController {
   #[Route('/login', name: 'app_login', methods:['GET', 'HEAD', 'POST'])]
   /**

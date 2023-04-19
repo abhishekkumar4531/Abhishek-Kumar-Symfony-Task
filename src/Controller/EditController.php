@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use App\Service\FetchData;
 
 /**
  * EditController
@@ -15,6 +16,32 @@ use Symfony\Component\HttpFoundation\Request;
  * When user wants to edit or update his/her information then this class will be called.
  */
 class EditController extends AbstractController {
+
+  /**
+   * It will be the object of EntityManagerInterfaced.
+   *
+   * @var mixed
+   */
+  private $entityManager;
+
+  /**
+   * It will be store the repository of Users class.
+   *
+   * @var mixed
+   */
+  private $userRepo;
+
+  /**
+   * __construct - It will update the $entityManager and $verify.
+   *
+   * @param  mixed $entityManager
+   * @param  mixed $request
+   * @return void
+   */
+  public function __construct(EntityManagerInterface $entityManager) {
+    $this->entityManager = $entityManager;
+    $this->userRepo = $entityManager->getRepository(Users::class);
+  }
 
   #[Route('/edit', name: 'app_edit', methods: ['GET', 'POST', 'HEAD'])]
 
@@ -28,7 +55,8 @@ class EditController extends AbstractController {
    * @param  mixed $request
    * @return Response
    */
-  public function index(EntityManagerInterface $entityManager, Request $request): Response {
+  public function index(Request $request): Response {
+    $getUserData = new FetchData();
     //When user submit the edit/update form then if statement will be execute.
     //It will fetch all the data from edit/update form and then update the form.
     //If this function will called through link, url or using navbar then else
@@ -36,14 +64,12 @@ class EditController extends AbstractController {
     if(isset($_POST['updateBtn'])) {
       $session = $request->getSession();
 
-      //Fetch the user's Bio from form and filter using 'htmlspecialchars'.
       $userBio = htmlspecialchars($_POST['user_bio'], ENT_QUOTES);
       $userFirstName = $_POST['first_name'];
       $userLastName = $_POST['last_name'];
       $userMobile = $_POST['user_mobile'];
       $userEmail = $_POST['user_email'];
 
-      //Fetch the user's earlier image which is store in session.
       $userImage = $session->get('user_image');
 
       //If user want to also update their image then this statement will be execute.
@@ -61,31 +87,34 @@ class EditController extends AbstractController {
           $userImage = "assets/uploads/". $imgName;
         }
         else {
+          $userData['userImage'] = $userImage;
+          $userData['userBio'] = $userBio;
+          $userData['userFirstName'] = $userFirstName;
+          $userData['userLastName'] = $userLastName;
+          $userData['userMobile'] = $userMobile;
+          $userData['userEmail'] =$userEmail;
           return $this->render('edit/index.html.twig', [
-            'userImage' => $userImage,
-            'userBio' => $userBio,
-            'userFirstName' => $userFirstName,
-            'userLastName' => $userLastName,
-            'userMobile' => $userMobile,
-            'userEmail' => $userEmail,
+            'userData' => $userData,
             'imageTypeError' => "Please select valid image"
           ]);
         }
       }
-      $verify = $entityManager->getRepository(Users::class);
-      //Creating object of @USers class and checking the is email already available?
-      $checkEmail = $verify->findOneBy([ 'userEmail' => $userEmail ]);
 
-      //If $checkEmail will be user's credential then only this statement will be execute.
+      $fetchData = $this->userRepo->findOneBy([ 'userEmail' => $userEmail ]);
+
+      //If fetchData will be user's credential then only this statement will be execute.
       //Update the all the updated feilds of user.
-      if($checkEmail) {
-        $checkEmail->setUserFirstName($userFirstName);
-        $checkEmail->setUserLastName($userLastName);
-        $checkEmail->setUserMobile($userMobile);
-        $checkEmail->setUserBio($userBio);
-        $checkEmail->setUserImage($userImage);
-        $entityManager->flush();
-        return $this->fetchUserProfile($verify, $request, $userEmail);
+      if($fetchData) {
+        $fetchData->setUserFirstName($userFirstName);
+        $fetchData->setUserLastName($userLastName);
+        $fetchData->setUserMobile($userMobile);
+        $fetchData->setUserBio($userBio);
+        $fetchData->setUserImage($userImage);
+        $this->entityManager->flush();
+        $userData =  $getUserData->fetchUserProfile($this->userRepo, $request, $userEmail);
+        return $this->render('edit/index.html.twig', [
+          'userData' => $userData
+        ]);
       }
       else {
         return $this->redirectToRoute('app_home');
@@ -95,8 +124,10 @@ class EditController extends AbstractController {
       $session = $request->getSession();
       if($session->get('user_loggedin')) {
         $userEmail = $session->get('user_loggedin');
-        $verify = $entityManager->getRepository(Users::class);
-        return $this->fetchUserProfile($verify, $request, $userEmail);
+        $userData = $getUserData->fetchUserProfile($this->userRepo, $request, $userEmail);
+        return $this->render('edit/index.html.twig', [
+          'userData' => $userData
+        ]);
       }
       else {
         $session->invalidate();
@@ -105,45 +136,5 @@ class EditController extends AbstractController {
     }
   }
 
-  /**
-   * fetchUserProfile
-   * This function is communicates with database and also display user's credentials.
-   *
-   * @param  mixed $verify
-   * @param  mixed $request
-   * @param  mixed $userEmail
-   *
-   * It will be verify that the is $userEmail is exiting or not
-   * if exists then fetch all the user's credentials and
-   * then render back to edit profile page with all the credentails.
-   * @return void
-   */
-  private function fetchUserProfile($verify, $request, $userEmail) {
-    $session = $request->getSession();
-    $fetchCredentials = $verify->findOneBy([ 'userEmail' => $userEmail ]);
 
-    //If $fetchCredentials will not return null that means user exits,
-    //then fetch all the data after that render to the edit profile page with values.
-    //If due to any reason $fetchCredentails return null then redirect to the home page.
-    if($fetchCredentials) {
-      $fetchImage = $fetchCredentials->getUserImage();
-      $session->set('user_image', $fetchImage);
-      $fetchBio = $fetchCredentials->getUserBio();
-      $fetchFirstName = $fetchCredentials->getUserFirstName();
-      $fetchLastName = $fetchCredentials->getUserLastName();
-      $fetchMobile = $fetchCredentials->getUserMobile();
-      $fetchEmail = $fetchCredentials->getUserEmail();
-      return $this->render('edit/index.html.twig', [
-        'userImage' => $fetchImage,
-        'userBio' => $fetchBio,
-        'userFirstName' => $fetchFirstName,
-        'userLastName' => $fetchLastName,
-        'userMobile' => $fetchMobile,
-        'userEmail' => $fetchEmail
-      ]);
-    }
-    else {
-      return $this->redirectToRoute('app_home');
-    }
-  }
 }

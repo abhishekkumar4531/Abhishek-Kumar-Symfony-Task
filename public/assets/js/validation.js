@@ -1,7 +1,16 @@
-reg_obj = new UserValidity();
+//Creating the object for userValidity class
+regObj = new UserValidity();
+
+/**
+ * checkFname is responsible for checking the validations of user's first name feild.
+ * When user entered their first name then onblur this function will be execute.
+ * First it will fetch the what user entered and then call a function for checking
+ * the validations of entered value.
+ * If user entered valid then ok otherwise it will show a error message.
+ */
 function checkFname() {
-  var user_name = document.getElementById('first_name').value;
-  var status = reg_obj.checkName(user_name);
+  var userName = document.getElementById('first_name').value;
+  var status = regObj.checkName(userName);
   if(status) {
     document.getElementById("invalid_fname").innerHTML = `Enter only alphabets`;
     document.getElementById("submitBtn").disabled = true;
@@ -11,9 +20,17 @@ function checkFname() {
     document.getElementById("submitBtn").disabled = false;
   }
 }
+
+/**
+ * checkLname is responsible for checking the validations of user's last name feild.
+ * When user entered their last name then onblur this function will be execute.
+ * First it will fetch the what user entered and then call a function for checking
+ * the validations of entered value.
+ * If user entered valid then ok otherwise it will show a error message.
+ */
 function checkLname() {
-  var user_name = document.getElementById('last_name').value;
-  var status = reg_obj.checkName(user_name);
+  var userName = document.getElementById('last_name').value;
+  var status = regObj.checkName(userName);
   if(status) {
     document.getElementById("invalid_lname").innerHTML = `Enter only alphabets`;
     document.getElementById("submitBtn").disabled = true;
@@ -23,9 +40,17 @@ function checkLname() {
     document.getElementById("submitBtn").disabled = false;
   }
 }
+
+/**
+ * checkPhoneNo is responsible for checking the validations of user's mobile number feild.
+ * When user entered their mobile number then onblur this function will be execute.
+ * First it will fetch the what user entered and then call a function for checking
+ * the validations of entered value.
+ * If user entered valid then ok otherwise it will show a error message.
+ */
 function checkPhoneNo() {
-  var user_mobile = document.getElementById('mobile').value;
-  var status = reg_obj.checkPhone(user_mobile);
+  var userMobile = document.getElementById('mobile').value;
+  var status = regObj.checkPhone(userMobile);
   if(status) {
     document.getElementById("invalid_mobile").innerText = `Enter valid mobile number`;
     document.getElementById("submitBtn").disabled = true;
@@ -35,9 +60,17 @@ function checkPhoneNo() {
     document.getElementById("submitBtn").disabled = false;
   }
 }
+
+/**
+ * checkEmailStatus is responsible for checking the validations of user's email feild.
+ * When user entered their email then onblur this function will be execute.
+ * First it will fetch the what user entered and then call a function for checking
+ * the validations of entered value.
+ * If user entered valid then show a success otherwise it will show a error message.
+ */
 function checkEmailStatus() {
-  var user_email = document.getElementById('email').value;
-  var status = reg_obj.checkEmail(user_email);
+  var userEmail = document.getElementById('email').value;
+  var status = regObj.checkEmail(userEmail);
   if(status) {
     document.getElementById("email_success").innerText = ``;
     document.getElementById("email_status").innerText = `Enter valid email`;
@@ -49,9 +82,17 @@ function checkEmailStatus() {
     document.getElementById("submitBtn").disabled = false;
   }
 }
+
+/**
+ * checkPasswordStatus is responsible for checking the validations of user's password feild.
+ * When user entered their password then onblur this function will be execute.
+ * First it will fetch what user entered and then call a function for checking
+ * the validations of entered value.
+ * If user entered valid then show success message otherwise it will show a error message.
+ */
 function checkPasswordStatus() {
-  var user_pwd = document.getElementById('pwd').value;
-  var status = reg_obj.checkPasswords(user_pwd);
+  var userPwd = document.getElementById('pwd').value;
+  var status = regObj.checkPasswords(userPwd);
   if(status) {
     document.getElementById("pwd_success").innerText = ``;
     document.getElementById("pwd_status").innerText = `Enter valid password`;
@@ -63,10 +104,18 @@ function checkPasswordStatus() {
     document.getElementById("submitBtn").disabled = false;
   }
 }
+
+/**
+ * onfirmPassword is responsible for comparing the new and confirm password.
+ * When user entered their confirm password then onblur this function will be execute.
+ * First it will fetch from both the feild what user entered and then call a
+ * function for comapring the values.
+ * If user entered valid then ok otherwise it will show a error message.
+ */
 function confirmPassword() {
-  var new_pwd = document.getElementById('pwd').value;
-  var cnf_pwd = document.getElementById('cnfPwd').value;
-  var status = reg_obj.samePasswords(new_pwd, cnf_pwd);
+  var newPwd = document.getElementById('pwd').value;
+  var cnfPwd = document.getElementById('cnfPwd').value;
+  var status = regObj.samePasswords(newPwd, cnfPwd);
   if(status) {
     document.getElementById("cnfPwd_status").innerText = ``;
     document.getElementById("submitBtn").disabled = false;

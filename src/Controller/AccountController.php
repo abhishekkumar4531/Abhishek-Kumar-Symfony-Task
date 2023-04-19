@@ -13,60 +13,77 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * AccountController
  * This class is extends with AbstractController
- * This class is user's profile page.
- * In this class only one fuction available - index.
+ * It is responsible for showing the user's profile page with user's image, fullName
+ * and all the post which is posted be user.
  */
 class AccountController extends AbstractController {
 
+  /**
+   * It will be the object of EntityManagerInterfaced.
+   *
+   * @var mixed
+   */
+  private $entityManager;
+
+  /**
+   * It will be store the repository of Users class.
+   *
+   * @var mixed
+   */
+  private $userRepo;
+
+  /**
+   * It will be store the repository of Users class.
+   *
+   * @var mixed
+   */
+  private $postRepo;
+
+  /**
+   * __construct - It will update the $entityManager and $userRepo
+   * and postRepo.
+   *
+   * @param  mixed $entityManager
+   * @param  mixed $request
+   *
+   * @return void
+   */
+  public function __construct(EntityManagerInterface $entityManager) {
+    $this->entityManager = $entityManager;
+    $this->userRepo = $entityManager->getRepository(Users::class);
+    $this->postRepo = $entityManager->getRepository(Posts::class);
+  }
+
   #[Route('/account', name: 'app_account')]
   /**
-   * index
-   * First it will start the session and first check is user logged in or not?
+   * First it will start the session and check is user logged in or not?
    * If user not logged in then destroy the session and redirect to the login page.
    * If user logged in then continue.
    * First it will fetch user's data from database and then display data using redering.
    *
-   * @param  mixed $entityManager
-   * @param  mixed $request
    * @return Response
    */
-  public function index(EntityManagerInterface $entityManager, Request $request): Response
+  public function index(Request $request): Response
   {
-    //start the session
     $session = $request->getSession();
+
     //If user logged in then fetch the user data and render to the display page.
+    //If user not logged in then destroy the session and redirect to login page.
     if($session->get('user_loggedin')) {
-      //Fetch userEmail of logged in user
       $userEmail = $session->get('user_loggedin');
 
-      $verify = $entityManager->getRepository(Users::class);
+      $fetchCredentials = $this->userRepo->findOneBy([ 'userEmail' => $userEmail ]);
 
-      //Create the object for Users class and fetch user's data whose email is $userEmail.
-      $fetchCredentials = $verify->findOneBy([ 'userEmail' => $userEmail ]);
-
-      //If user $fetchCredentials not null.
+      //If user $fetchCredentials not null fetch all the data from database and
+      //render to the display page with values;
       if($fetchCredentials) {
-        //Fetch the user's id.
         $userId = $fetchCredentials->getId();
-
-        //Fetch the user's first name.
         $firstName = $fetchCredentials->getUserFirstName();
-
-        //Fetch the user's last name.
         $lastName = $fetchCredentials->getUserLastName();
-
-        //Fetch the user's image.
         $userImage = $fetchCredentials->getUserImage();
-
-        //Fetch the user's bio.
         $userBio = $fetchCredentials->getUserBio();
 
-        $verifyPost = $entityManager->getRepository(Posts::class);
-
-        //Create object for Posts class and fetch user's data whose email is $userEmail.
-        $fetchPost = $verifyPost->findBy([ 'userEmail' => $userEmail ]);
-
-        //After that render to the account's display page with user's credentails.
+        $fetchPost = $this->postRepo->findBy([ 'userEmail' => $userEmail ]);
         return $this->render('account/index.html.twig', [
           'userId' => $userId,
           'userFirstName' => $firstName,
@@ -77,12 +94,8 @@ class AccountController extends AbstractController {
         ]);
       }
     }
-    //If user not logged in.
     else {
-      //Destroy the session.
       $session->invalidate();
-
-      //And resirect to the home page
       return $this->redirectToRoute('app_login');
     }
   }
