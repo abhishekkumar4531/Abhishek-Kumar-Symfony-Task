@@ -92,7 +92,7 @@ class ResetController extends AbstractController
         $session = $request->getSession();
         $getOtp = $session->get('get_otp');
         $userEmail = $session->get('user_email');
-        $session->invalidate();
+        //$session->invalidate();
         if(number_format($this->userData['enteredOtp']) === number_format($getOtp)) {
           $fetchCredentials = $this->userRepo->findOneBy([ 'userEmail' => $userEmail ]);
           if($fetchCredentials) {
@@ -104,6 +104,7 @@ class ResetController extends AbstractController
         else {
           return $this->render('reset/reset.html.twig', [
             'userData' => $this->userData,
+            'userName' => $this->userData['userName'],
             'invalidOtp' => 'Please enter valid OTP'
           ]);
         }
@@ -111,6 +112,7 @@ class ResetController extends AbstractController
       else {
         return $this->render('reset/reset.html.twig', [
           'userData' => $this->userData,
+          'userName' => $this->userData['userName'],
           'invalidPassword' => 'Please enter same password'
         ]);
       }
@@ -122,7 +124,7 @@ class ResetController extends AbstractController
       }
       else {
         $session->invalidate();
-        return $this->render('reset/index.html.twig', []);
+        return $this->render('reset/index.html.twig');
       }
     }
   }
