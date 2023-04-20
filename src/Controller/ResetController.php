@@ -12,6 +12,7 @@ use App\Entity\Users;
 
 /**
  * ResetController
+ * This is reponsible for reseting the user's password
  */
 class ResetController extends AbstractController
 {
@@ -38,13 +39,13 @@ class ResetController extends AbstractController
   private $userData = Array();
 
   /**
-   * __construct - It will update the $entityManager and $userRepo
-   * and postRepo.
+   * __construct - It will initialize the class and store objects in $entityManager,
+   * and $userRepo.
    *
-   * @param  mixed $entityManager
-   * @param  mixed $request
+   *   @param  mixed $entityManager
+   *     It is to manage persistance and retriveal Entity object from Database.
    *
-   * @return void
+   *   @return void
    */
   public function __construct(EntityManagerInterface $entityManager) {
     $this->entityManager = $entityManager;
@@ -53,11 +54,22 @@ class ResetController extends AbstractController
 
   #[Route('/reset', name: 'app_reset')]
   /**
-   * index
+   * It is managing three cases
+   * First case : It will fetch email from user and generate otp and send to the
+   * user registered email.
+   * Second case : It will fetch new password from form and update to the database.
+   * Third case : Apart from above two cases it will check if user logged in or not,
+   * if logged in then redirect to the home page otherwise redirect to login page.
    *
-   * @param  mixed $entityManager
-   * @param  mixed $request
-   * @return Response
+   *   @param  mixed $request
+   *     This Request object is to handles the session.
+   *
+   *   @return Response
+   *     If user submit generate otp page then render to reset page.
+   *     If user submit reset page and if password reset done then redirect to
+   *     login page otherwise render to reset page.
+   *     If user direct try to access this controller then if logged in then
+   *     redirect to home page otherwise redirect to login page.
    */
   public function index(Request $request): Response {
     //f user submit the reset form then this statement will execute
@@ -128,4 +140,5 @@ class ResetController extends AbstractController
       }
     }
   }
+
 }

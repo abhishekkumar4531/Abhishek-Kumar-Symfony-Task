@@ -19,34 +19,42 @@ use Doctrine\ORM\EntityManagerInterface;
 class AccountController extends AbstractController {
 
   /**
-   * It will be the object of EntityManagerInterfaced.
+   * It stores the object of EntityManagerInterface
+   * It is also manage persistance and retriveal Entity object from Database.
    *
-   * @var mixed
+   *   @var mixed
    */
   private $entityManager;
 
   /**
-   * It will be store the repository of Users class.
+   * It store the object of UserRepository class and also fetch data from database.
    *
-   * @var mixed
+   *   @var mixed
    */
   private $userRepo;
 
   /**
-   * It will be store the repository of Users class.
+   * It store the object of PostRepository class and also fetch data from database.
    *
-   * @var mixed
+   *   @var mixed
    */
   private $postRepo;
 
   /**
-   * __construct - It will update the $entityManager and $userRepo
-   * and postRepo.
+   * It will store the user's personal data.
    *
-   * @param  mixed $entityManager
-   * @param  mixed $request
+   *   @var array
+   */
+  private $userData = [];
+
+  /**
+   * __construct - It will initialize the class and store objects in $entityManager,
+   * $userRepo, $postRepo and $arrange.
    *
-   * @return void
+   *   @param  mixed $entityManager
+   *     It is to manage persistance and retriveal Entity object from Database.
+   *
+   *   @return void
    */
   public function __construct(EntityManagerInterface $entityManager) {
     $this->entityManager = $entityManager;
@@ -61,35 +69,37 @@ class AccountController extends AbstractController {
    * If user logged in then continue.
    * First it will fetch user's data from database and then display data using redering.
    *
-   * @return Response
+   *   @param  mixed $request
+   *     This Request object is to handles the session.
+   *
+   *   @return Response
+   *     If user logged in and user exits then int will render to user's persobal
+   *     profile page.
+   *     If user not logged in then redirect to the login page.
    */
   public function index(Request $request): Response
   {
     $session = $request->getSession();
 
-    //If user logged in then fetch the user data and render to the display page.
-    //If user not logged in then destroy the session and redirect to login page.
+    // If user logged in then fetch the user data and render to the display page.
+    // If user not logged in then destroy the session and redirect to login page.
     if($session->get('user_loggedin')) {
       $userEmail = $session->get('user_loggedin');
 
       $fetchCredentials = $this->userRepo->findOneBy([ 'userEmail' => $userEmail ]);
 
-      //If user $fetchCredentials not null fetch all the data from database and
-      //render to the display page with values;
+      // If user $fetchCredentials not null fetch all the data from database and
+      // render to the display page with values;
       if($fetchCredentials) {
-        $userId = $fetchCredentials->getId();
-        $firstName = $fetchCredentials->getUserFirstName();
-        $lastName = $fetchCredentials->getUserLastName();
-        $userImage = $fetchCredentials->getUserImage();
-        $userBio = $fetchCredentials->getUserBio();
+        $this->userData['userId'] = $fetchCredentials->getId();
+        $this->userData['firstName'] = $fetchCredentials->getUserFirstName();
+        $this->userData['lastName'] = $fetchCredentials->getUserLastName();
+        $this->userData['userImage'] = $fetchCredentials->getUserImage();
+        $this->userData['userBio'] = $fetchCredentials->getUserBio();
 
         $fetchPost = $this->postRepo->findBy([ 'userEmail' => $userEmail ]);
         return $this->render('account/index.html.twig', [
-          'userId' => $userId,
-          'userFirstName' => $firstName,
-          'userLastName' => $lastName,
-          'userImage' => $userImage,
-          'userBio' => $userBio,
+          'userData' => $this->userData,
           'fetchPosts' => $fetchPost
         ]);
       }
@@ -99,4 +109,5 @@ class AccountController extends AbstractController {
       return $this->redirectToRoute('app_login');
     }
   }
+
 }

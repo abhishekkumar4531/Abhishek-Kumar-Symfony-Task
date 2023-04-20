@@ -2,6 +2,9 @@
 
 namespace App\Service;
 
+/**
+ * FetchData
+ */
 class FetchData {
 
   /**
@@ -12,25 +15,32 @@ class FetchData {
   private $userData = Array();
 
   /**
-   * fetchUserProfile
-   * This function is communicates with database and also display user's credentials.
-   *
-   * @param  mixed $verify
-   * @param  mixed $request
-   * @param  mixed $userEmail
-   *
+   * This function is communicates with database and also display user's
+   * credentials.
    * It will be verify that the is $userEmail is exiting or not
    * if exists then fetch all the user's credentials and
    * then render back to edit profile page with all the credentails.
-   * @return void
+   *
+   *   @param  mixed $userRepo
+   *     It store the object of UserRepository class and also fetch data from
+   *     database.
+   *   @param  mixed $request
+   *     This Request object is to handles the session.
+   *   @param  string $userEmail
+   *     It store the user email.
+   *   @return array
+   *     If user exits then it will reurn an array $userData which consists user's
+   *     data otherwise null.
    */
   public function fetchUserProfile($userRepo, $request, $userEmail) {
     $session = $request->getSession();
     $fetchCredentials = $userRepo->findOneBy([ 'userEmail' => $userEmail ]);
 
-    //If $fetchCredentials will not return null that means user exits,
-    //then fetch all the data after that render to the edit profile page with values.
-    //If due to any reason $fetchCredentails return null then redirect to the home page.
+    // If $fetchCredentials will not return null that means user exits,
+    // then fetch all the data after that render to the edit profile page with
+    // values.
+    // If due to any reason $fetchCredentails return null then redirect to the
+    // home page.
     if($fetchCredentials) {
       $fetchImage = $fetchCredentials->getUserImage();
       $session->set('user_image', $fetchImage);
@@ -40,26 +50,32 @@ class FetchData {
       $fetchMobile = $fetchCredentials->getUserMobile();
       $fetchEmail = $fetchCredentials->getUserEmail();*/
 
-      $userData['userImage'] = $fetchImage;
-      $userData['userBio'] = $fetchCredentials->getUserBio();
-      $userData['userFirstName'] = $fetchCredentials->getUserFirstName();
-      $userData['userLastName'] = $fetchCredentials->getUserLastName();
-      $userData['userMobile'] = $fetchCredentials->getUserMobile();
-      $userData['userEmail'] =$fetchCredentials->getUserEmail();
+      $this->userData['userImage'] = $fetchImage;
+      $this->userData['userBio'] = $fetchCredentials->getUserBio();
+      $this->userData['userFirstName'] = $fetchCredentials->getUserFirstName();
+      $this->userData['userLastName'] = $fetchCredentials->getUserLastName();
+      $this->userData['userMobile'] = $fetchCredentials->getUserMobile();
+      $this->userData['userEmail'] =$fetchCredentials->getUserEmail();
 
-      return $userData;
+      return $this->userData;
     }
     return null;
   }
 
   /**
-   * arrangePostData - This is for display the user's post with condtion of maximum
+   * This is for display the user's post with condtion of maximum
    * 10 posts can be load at a time
    *
-   * @param mixed $fetchUsers
-   * @param array $posts
-   * @param int $count
-   * @return array
+   *   @param  mixed $userRepo
+   *     It store the object of UserRepository class and also fetch data from
+   *     database.
+   *   @param  array $posts
+   *     It stores the all the post data of database.
+   *   @param  int $count
+   *     It stores the number of post already desplayed on home page.
+   *
+   *   @return array
+   *     It will return an array $mediaData[] which consists post data.
    */
   public function arrangePostData($userRepo, $posts, $count) {
     $count += 10;
@@ -89,6 +105,7 @@ class FetchData {
     }
     return $mediaData;
   }
+
 }
 
 ?>

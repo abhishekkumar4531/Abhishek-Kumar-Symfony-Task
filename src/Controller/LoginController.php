@@ -14,6 +14,35 @@ use Symfony\Component\HttpFoundation\Request;
  * This class is responsible for user login
  */
 class LoginController extends AbstractController {
+
+  /**
+   * It stores the object of EntityManagerInterface
+   * It is also manage persistance and retriveal Entity object from Database.
+   *
+   *   @var mixed
+   */
+  private $entityManager;
+
+  /**
+   * It store the object of UserRepository class and also fetch data from database.
+   *
+   *   @var mixed
+   */
+  private $userRepo;
+
+  /**
+   * __construct - It will initialize the class and store objects in $entityManager,
+   * and $userRepo
+   *
+   *   @param  mixed $entityManager
+   *     It is to manage persistance and retriveal Entity object from Database.
+   *   @return void
+   */
+  public function __construct(EntityManagerInterface $entityManager) {
+    $this->entityManager = $entityManager;
+    $this->userRepo = $entityManager->getRepository(Users::class);
+  }
+
   #[Route('/login', name: 'app_login', methods:['GET', 'HEAD', 'POST'])]
   /**
    * index
@@ -21,20 +50,24 @@ class LoginController extends AbstractController {
    * If user send the request to the controller using other way then else block
    * of first if block will be execute.
    *
-   * @param  mixed $entityManager
-   * @return Response
+   *   @param  mixed $request
+   *     This Request object is to handles the session.
+   *
+   *   @return Response
+   *     If user logged in and post updated then redirect to the home page,
+   *     if user not logged in then render to the login page.
+   *
    */
-  public function index(EntityManagerInterface $entityManager, Request $request): Response {
-    //If User will submit the login form then this statement will be execute.
-    //First it will fetch userEmail and userPassword from login form.
-    //After that it will validate, if user exits then it will redirect to home page.
-    //If user filled invalid credentials then it will again render to the login page
-    //with error message.
+  public function index(Request $request): Response {
+    // If User will submit the login form then this statement will be execute.
+    // First it will fetch userEmail and userPassword from login form.
+    // After that it will validate, if user exits then it will redirect to home page.
+    // If user filled invalid credentials then it will again render to the login page
+    // with error message.
     if(isset($_POST['submitLogin'])) {
       $userEmail = $_POST['useremail'];
       $userPassword = $_POST['userpassword'];
-      $verify = $entityManager->getRepository(Users::class);
-      $fetchCredentials = $verify->findOneBy([ 'userEmail' => $userEmail ]);
+      $fetchCredentials = $this->userRepo->findOneBy([ 'userEmail' => $userEmail ]);
       if($fetchCredentials) {
         $checkPassword = $fetchCredentials->getUserPassword();
         if($checkPassword === $userPassword) {
@@ -69,4 +102,5 @@ class LoginController extends AbstractController {
       }
     }
   }
+
 }

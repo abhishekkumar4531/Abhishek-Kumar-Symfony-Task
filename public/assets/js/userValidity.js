@@ -33,8 +33,11 @@ class UserValidity{
    * checkName is a parametrised method which is responsible for the validation
    * of user name.
    *
-   * @param {string} userName
-   * @returns boolean
+   *   @param string userName
+   *     It is string type which store the user first/last name.
+   *
+   *   @returns boolean
+   *     If userName invalid then return true otherwise false
    */
   checkName(userName){
     if(!(userName.match(this.check_valid))) {
@@ -47,8 +50,11 @@ class UserValidity{
    * checkPhone is a parametrised method which is responsible for the validation
    * of user phone number.
    *
-   * @param {string} userPhone
-   * @returns boolean
+   *   @param string userPhone
+   *     It stores the user phone number.
+   *
+   *   @returns boolean
+   *     If userPhone invalid then return true otherwise false
    */
   checkPhone(userPhone){
     if(!(userPhone.match(this.check_phone))) {
@@ -61,8 +67,11 @@ class UserValidity{
    * checkEmail is a parametrised method which is responsible for the validation
    * of user email.
    *
-   * @param {string} userEmail
-   * @returns boolean
+   *   @param string userEmail
+   *     It stores the user phone number.
+   *
+   *   @returns boolean
+   *     If userPhone invalid then return true otherwise false
    */
   checkEmail(userEmail){
     if(!(userEmail.match(this.check_email))) {
@@ -75,8 +84,10 @@ class UserValidity{
    * checkPasswords is a parametrised method which is responsible for the
    * validation of user passwords.
    *
-   * @param {string} userPwd
-   * @returns boolean
+   *   @param string userPwd
+   *     It stores the user password.
+   *   @returns boolean
+   *     If userPwd invalid then return true otherwise false
    */
   checkPasswords(userPwd){
     if(!(userPwd.match(this.check_pwd))) {
@@ -92,9 +103,13 @@ class UserValidity{
    * If old password and new password will be same then it will return false
    * otherwise it will return true.
    *
-   * @param {string} currentPassword
-   * @param {string} newPassword
-   * @returns boolean
+   *   @param string currentPassword
+   *     It store the user current password
+   *   @param string newPassword
+   *     It store the user entered new password
+   *
+   *   @returns boolean
+   *     If both password same then return false otherwise true.
    */
   diffPasswords(currentPassword, newPassword) {
     if(currentPassword === newPassword){
@@ -110,9 +125,13 @@ class UserValidity{
    * If new password and confirm password will be same then it will return true
    * otherwise it will return false.
    *
-   * @param {string} newPassword
-   * @param {string} cnfPassword
-   * @returns boolean
+   *   @param string newPassword
+   *     It store the user entered new password
+   *   @param string cnfPassword
+   *     It store the user entered cnfirm password
+   *
+   *   @returns boolean
+   *     If both password same then return true otherwise false.
    */
   samePasswords(newPassword, cnfPassword) {
     if(newPassword === cnfPassword){

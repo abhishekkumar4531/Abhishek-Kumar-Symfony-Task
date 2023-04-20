@@ -23,43 +23,48 @@ use Symfony\Component\HttpFoundation\Session\Session;
 class HomeController extends AbstractController {
 
   /**
-   * It will be the object of EntityManagerInterfaced.
+   * It stores the object of EntityManagerInterface
+   * It is also manage persistance and retriveal Entity object from Database.
    *
-   * @var mixed
+   *   @var mixed
    */
   private $entityManager;
 
   /**
-   * It will be store the repository of Users class.
+   * It store the object of UserRepository class and also fetch data from database.
    *
-   * @var mixed
+   *   @var mixed
    */
   private $userRepo;
 
   /**
-   * It will be store the repository of Users class.
+   * It store the object of PostRepository class and also fetch data from database.
    *
-   * @var mixed
+   *   @var mixed
    */
   private $postRepo;
 
   /**
-   * userData - It will store the user's personal data.
+   * It will store the user's personal data.
    *
-   * @var array
+   *   @var array
    */
-  private $userData = Array();
+  private $userData = [];
 
+  /**
+   * It store the object of FetchData class.
+   *
+   *   @var mixed
+   */
   private $arrange;
 
   /**
-   * __construct - It will update the $entityManager and $userRepo
-   * and postRepo.
+   * __construct - It will initialize the class and store objects in $entityManager,
+   * $userRepo, $postRepo and $arrange.
    *
-   * @param  mixed $entityManager
-   * @param  mixed $request
-   *
-   * @return void
+   *   @param  mixed $entityManager
+   *     It is to manage persistance and retriveal Entity object from Database.
+   *   @return void
    */
   public function __construct(EntityManagerInterface $entityManager) {
     $this->entityManager = $entityManager;
@@ -71,16 +76,17 @@ class HomeController extends AbstractController {
   #[Route('/', name: 'app_home')]
   #[Route('/home', name: 'app_homes')]
   /**
-   * index
    * First it will start the session and check is user logged in or not?
    * If logged in then first fetch user's name and image and then render to
    * home page with user's name and image.
    * If user not logged in then destroy the session and redirect to login page.
    *
-   * @param  mixed $entityManager
-   * @param  mixed $request
+   *   @param  mixed $request
+   *     This Request object is to handles the session.
    *
-   * @return Response
+   *   @return Response
+   *     If user logged in then render to the hoem page otherwise redirect to the
+   *     login page.
    */
   public function index(Request $request): Response {
     $session = $request->getSession();
@@ -115,20 +121,22 @@ class HomeController extends AbstractController {
    * After file type validations it will store the post's information into database,
    * after that redirect to the home page.
    *
-   * @param  mixed $entityManager
-   * @param  mixed $request
+   *   @param  mixed $request
+   *     This Request object is to handles the session.
    *
-   * @return Response
+   *   @return Response
+   *     If user logged in and post updated then redirect to the home page,
+   *     if user not logged in then redirect to the login page.
    */
   public function userPost(Request $request): Response {
     $session = $request->getSession();
-    //If user logged in then it will check if user submit the post's form or not?
-    //If submit the post form then fetch the data from form and validate them,
-    //after validation it will store in database and then reedirect to home page.
-    //If user not submit the form and try to call this function then it will
-    //redirect to home page.
-    //If user not logged in then it will first distroy the session and then
-    //redirect to login page.
+    // If user logged in then it will check if user submit the post's form or not?
+    // If submit the post form then fetch the data from form and validate them,
+    // after validation it will store in database and then reedirect to home page.
+    // If user not submit the form and try to call this function then it will
+    // redirect to home page.
+    // If user not logged in then it will first distroy the session and then
+    // redirect to login page.
     if(($session->get('user_loggedin'))) {
       if(isset($_POST['upload'])) {
         $userEmail = $session->get('user_loggedin');
@@ -178,13 +186,17 @@ class HomeController extends AbstractController {
    * post data render to the user's profile page with user's shareble inforation.
    * *Shareable information : userFullName, userImage, userBio and user all posts.
    *
-   * @param  mixed $entityManager
-   * @param  mixed $request
-   * @param  int $userId
+   *   @param  mixed $request
+   *     This Request object is to handles the session.
    *
-   * @return void
+   *   @param  int $userId
+   *     It store the user id which get from the url.
+   *
+   *   @return Response
+   *     If user logged in and user exits then int will redder to profile page.
+   *     If user not logged in then redirect to the login page.
    */
-  public function publicProfile(Request $request, int $userId) {
+  public function publicProfile(Request $request, int $userId) : Response {
     $session = $request->getSession();
     if($session->get('user_loggedin')) {
       $fetchCredentials = $this->userRepo->findOneBy([ 'id' => $userId ]);
@@ -216,11 +228,14 @@ class HomeController extends AbstractController {
    * And then call the $arrangePostData function, it will arrange the post data with condition.
    * After that render to post display page with post's data $mediaData.
    *
-   * @param  mixed $entityManager
-   * @param  mixed $request
-   * @return Response
+   *   @param  mixed $request
+   *     This Request object is to handles the session.
+   *
+   *   @return Response
+   *     If user logged in and user exits then int will render to home page.
+   *     If user not logged in then redirect to the login page.
    */
-  public function displayDefaultPost(Request $request) {
+  public function displayDefaultPost(Request $request) : Response {
     $session = $request->getSession();
     if(($session->get('user_loggedin'))) {
       $posts = $this->postRepo->findAll();
@@ -244,13 +259,16 @@ class HomeController extends AbstractController {
    * And then call the $arrangePostData function, it will arrange the post data with condition.
    * After that render to post display page with post's data $mediaData.
    *
-   * @param  mixed $entityManager
-   * @param  mixed $request
-   * @return Response
+   *   @param  mixed $request
+   *     This Request object is to handles the session.
+   *
+   *   @return Response
+   *     If user logged in and user exits then int will render to home page.
+   *     If user not logged in then redirect to the login page.
    */
-  public function displayMorePost(Request $request) {
+  public function displayMorePost(Request $request) : Response {
     $session = $request->getSession();
-    if(($session->get('user_loggedin'))) {
+    if($session->get('user_loggedin')) {
       $posts = $this->postRepo->findAll();
       $count = $session->get('count');
       $mediaData = $this->arrange->arrangePostData($this->userRepo, $posts, $count);

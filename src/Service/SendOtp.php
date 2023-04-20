@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Service;
-require '../vendor/autoload.php';
+// require '../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 
 class SendOtp {

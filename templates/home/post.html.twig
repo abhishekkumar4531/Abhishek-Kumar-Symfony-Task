@@ -1,7 +1,7 @@
 {% for data in mediaData %}
   <div class="card-display">
     <div class="post_by_user">
-      <div>
+      <div class = "img-link">
         <a href="home/profile/{{ data.userId }}">
           <img src = "/{{ data.userImage }}">
         </a>
@@ -11,8 +11,8 @@
       </div>
     </div>
     <div><p>{{ data.postComment }}</p></div>
-    <div>
-      <img src = "/{{ data.postFile }}" width = "200" height = "250">
+    <div class = "">
+      <img src = "/{{ data.postFile }}">
     </div>
     <div class="bot-icons d-flex justify-content-around">
       <a href="#"><span class="bi bi-heart"></span></a>

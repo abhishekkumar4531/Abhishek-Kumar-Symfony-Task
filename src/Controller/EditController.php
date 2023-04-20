@@ -18,25 +18,35 @@ use App\Service\FetchData;
 class EditController extends AbstractController {
 
   /**
-   * It will be the object of EntityManagerInterfaced.
+   * It stores the object of EntityManagerInterface
+   * It is also manage persistance and retriveal Entity object from Database.
    *
-   * @var mixed
+   *   @var mixed
    */
   private $entityManager;
 
   /**
-   * It will be store the repository of Users class.
+   * It store the object of UserRepository class and also fetch data from database.
    *
-   * @var mixed
+   *   @var mixed
    */
   private $userRepo;
 
   /**
-   * __construct - It will update the $entityManager and $verify.
+   * It will store the user's personal data.
    *
-   * @param  mixed $entityManager
-   * @param  mixed $request
-   * @return void
+   *   @var array
+   */
+  private $userData = [];
+
+  /**
+   * __construct - It will initialize the class and store objects in $entityManager,
+   * $userRepo, $postRepo and $arrange.
+   *
+   *   @param  mixed $entityManager
+   *     It is to manage persistance and retriveal Entity object from Database.
+   *
+   *   @return void
    */
   public function __construct(EntityManagerInterface $entityManager) {
     $this->entityManager = $entityManager;
@@ -44,16 +54,19 @@ class EditController extends AbstractController {
   }
 
   #[Route('/edit', name: 'app_edit', methods: ['GET', 'POST', 'HEAD'])]
-
   /**
-   * index
-   * index function is performing two type of operations,
+   * Index function is performing two type of operations,
    * 1st operation : If user want to update/edit their information
    * 2nd operation : If user want to just view their personal information
    *
-   * @param  mixed $entityManager
-   * @param  mixed $request
-   * @return Response
+   *   @param  mixed $request
+   *     This Request object is to handles the session.
+   *
+   *   @return Response
+   *     If user submit edit button then after updating the values it will
+   *     redirect to the edit page.
+   *     And in other cases it will check user logged in and exits then render to
+   *     the edit page or user not logged in then redirect to login page.
    */
   public function index(Request $request): Response {
     $getUserData = new FetchData();
@@ -87,14 +100,14 @@ class EditController extends AbstractController {
           $userImage = "assets/uploads/". $imgName;
         }
         else {
-          $userData['userImage'] = $userImage;
-          $userData['userBio'] = $userBio;
-          $userData['userFirstName'] = $userFirstName;
-          $userData['userLastName'] = $userLastName;
-          $userData['userMobile'] = $userMobile;
-          $userData['userEmail'] =$userEmail;
+          $this->userData['userImage'] = $userImage;
+          $this->userData['userBio'] = $userBio;
+          $this->userData['userFirstName'] = $userFirstName;
+          $this->userData['userLastName'] = $userLastName;
+          $this->userData['userMobile'] = $userMobile;
+          $this->userData['userEmail'] =$userEmail;
           return $this->render('edit/index.html.twig', [
-            'userData' => $userData,
+            'userData' => $this->userData,
             'imageTypeError' => "Please select valid image"
           ]);
         }
@@ -135,6 +148,5 @@ class EditController extends AbstractController {
       }
     }
   }
-
 
 }
