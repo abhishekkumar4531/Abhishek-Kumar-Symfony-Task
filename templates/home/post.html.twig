@@ -1,0 +1,31 @@
+{% for data in mediaData %}
+  <div class="card-display">
+    <div class="post_by_user">
+      <div class = "img-link">
+        <a href="home/profile/{{ data.userId }}">
+          <img src = "/{{ data.userImage }}">
+        </a>
+        <a href="home/profile/{{ data.userId }}">
+          <h6>{{ data.userFirstName }} {{ data.userLastName }}</h6>
+        </a>
+      </div>
+    </div>
+    <div><p>{{ data.postComment }}</p></div>
+    <div class = "">
+      <img src = "/{{ data.postFile }}">
+    </div>
+    <div class="bot-icons d-flex justify-content-around">
+      <a href="#"><span class="bi bi-heart"></span></a>
+      <a href="#"><span class="bi bi-chat"></span></a>
+      <a href="#"><span class="bi bi-share"></span></a>
+    </div>
+    <div class="share-icons d-flex justify-content-start">
+      <a target="_blank" href="">
+        <span class="bi bi-facebook"></span>
+      </a>
+      <a target="_blank" href="">
+        <span class="bi bi-twitter"></span>
+      </a>
+    </div>
+  </div>
+{% endfor %}

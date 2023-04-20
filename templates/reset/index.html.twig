@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset-Password{% endblock %}
+
+{% block body %}
+<div>
+  <h1>Send OTP to registered email</h1>
+  <form action="/reset" method="post">
+    <dl>
+      <dt>Enter Your Registered Email</dt>
+      <dd>
+      <input type="text" name="user_email" id="email" placeholder="Enter User-Email" required onblur="checkEmailStatus()"
+      value = "{% if userEmail is defined %}{{ userEmail }}{% endif %}"
+      >
+      </dd>
+      <dd id="email_success" class="success-msg"></dd>
+      <dd id="email_status" class="error-msg"></dd>
+      <dd class="error-msg">
+        {% if invalidEmail is defined %}{{ invalidEmail }}{% endif %}
+      </dd>
+      <dd>
+        <button id="submitBtn" name="sendOtp">Send OTP</button>
+      </dd>
+    </dl>
+  </form>
+  <div>
+    <a href="/login">Back to login</a>
+  </div>
+</div>
+{% endblock %}

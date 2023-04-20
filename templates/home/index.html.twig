@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home-Page{% endblock %}
+{% block loadMore %}assets/js/loadMore.js{% endblock %}
+{% block regLink %}edit{% endblock %}
+{% block regName %}Edit profile{% endblock %}
+{% block loginLink %}logout{% endblock %}
+{% block loginValue %}Logout{% endblock %}
+{% block body %}
+<div class = "welcome-user">
+	<h5>Welcome back {% if userFirstName is defined %}{{ userFirstName }}{% endif %}</h5>
+</div>
+<div class = "error-msg">
+	{% if errorMsg is defined %}
+		{{ errorMsg }}
+	{% endif %}
+</div>
+<div class = "home-page">
+	<div class="post-container">
+		<div class="post-container-display">
+			<div class="current-user-picture">
+				<img src="/{% if userImage is defined %}{{ userImage }}{% endif %}" alt="">
+			</div>
+			<div class="post-container-content">
+				<form action="/home/post" method="post" enctype="multipart/form-data">
+					<div class="upload-container">
+						<div class="upload-container-textarea">
+							<textarea name="newPost" id="newPost" cols="90" rows="5"
+							placeholder="What's in your mind!" required></textarea>
+						</div>
+						<div class="upload-container-button">
+							<div>
+								<input type="file" name="newFile" id="newImage"
+								class="custom-file-input form-control w-50" required>
+							</div>
+							<div>
+								<button name="upload">POST</button>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="user-post-container">
+	<div class="post-display" id="post-display"></div>
+</div>
+<div class="text-center p-2">
+	<button class="w-100 p-3" name="loadBtn" id="loadMore">Load More</button>
+</div>
+
+{% endblock %}

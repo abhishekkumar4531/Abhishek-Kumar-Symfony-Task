@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User-Account{% endblock %}
+{% block regLink %}edit{% endblock %}
+{% block regName %}Edit profile{% endblock %}
+{% block loginLink %}logout{% endblock %}
+{% block loginValue %}Logout{% endblock %}
+
+{% block body %}
+  <div class="home-page">
+    <div class="user-identity mt-3">
+      <div>
+        <div class="user-identity">
+          <img src="/{{ userData.userImage }}" alt="">
+        </div>
+        <h3>
+          {{ userData.firstName }} {{ userData.lastName }}
+        </h3>
+        <p>
+          {{ userData.userBio }}
+        </p>
+      </div>
+    </div>
+
+	  <div class="post-container">
+      <div class="post-container-display">
+        <div class="current-user-picture">
+          <img src="/{% if userData.userImage is defined %}{{ userData.userImage }}
+          {% endif %}" alt="">
+        </div>
+        <div class="post-container-content">
+          <form action="/home/post" method="post" enctype="multipart/form-data">
+            <div class="upload-container">
+              <div class="upload-container-textarea">
+                <textarea name="newPost" id="newPost" cols="90" rows="5"
+                placeholder="What's in your mind!" required></textarea>
+              </div>
+              <div class="upload-container-button">
+                <div>
+                  <input type="file" name="newFile" id="newImage"
+                  class="custom-file-input form-control w-50" required>
+                </div>
+                <div>
+                  <button name="upload">POST</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+	  </div>
+
+    <div class="user-post-container">
+      <div class="post-display" id="post-display-personal">
+        {% for post in fetchPosts %}
+          <div class="card-display">
+            <div class="post_by_user">
+              <div class = "img-link">
+                <a href="home/profile/{{ userData.userId }}">
+                  <img src = "/{{ userData.userImage }}">
+                </a>
+                <a href="home/profile/{{ userData.userId }}">
+                  <h6>{{ userData.firstName }} {{ userData.lastName }}</h6>
+                </a>
+                </div>
+              </div>
+            <div>
+              <p>{{ post.postComment }}</p>
+            </div>
+            <div>
+              <img src="/{{ post.postFile }}">
+            </div>
+            <div class="bot-icons d-flex justify-content-around">
+            <a href="#"><span class="bi bi-heart"></span></a>
+            <a href="#"><span class="bi bi-chat"></span></a>
+            <a href="#"><span class="bi bi-share"></span></a>
+            </div>
+            <div class="share-icons d-flex justify-content-start">
+              <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=">
+                <span class="bi bi-facebook"></span>
+              </a>
+              <a target="_blank" href="https://www.twitter.com/share?url=">
+                <span class="bi bi-twitter"></span>
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

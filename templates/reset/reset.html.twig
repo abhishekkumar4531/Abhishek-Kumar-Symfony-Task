@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reset-Password{% endblock %}
+
+{% block body %}
+<div>
+  <div>
+    <form action="/reset" method="post">
+      <h1>Reset password</h1>
+      <dl>
+        <dt>Your Name</dt>
+        <dd>
+          <input type="text" name="userName" id="userName" readonly
+          value="{{ userName }}"
+          >
+        </dd>
+        <dt>Enter OTP</dt>
+        <dd>
+          <input type="text" name="enterOtp" id="otp" required placeholder="Enter OTP"
+          value="{% if userData.enteredOtp is defined %}{{ userData.enteredOtp }}{% endif %}"
+          >
+        </dd>
+        <dd class="error-msg"></dd>
+        <dd class="error-msg">
+          {% if invalidOtp is defined %}{{ invalidOtp }}{% endif %}
+        </dd>
+        <dt>Enter New Password</dt>
+        <dd>
+          <input type="password" name="newPassword" id="pwd" required
+          onblur="checkPasswordStatus()" placeholder="Enter New Password"
+          value="{% if userData.newPassword is defined %}{{ userData.newPassword }}{% endif %}"
+          >
+        </dd>
+        <dd id="pwd_success" class="success-msg"></dd>
+        <dd id="pwd_status" class="error-msg"></dd>
+        <dt>Confirm Your Password</dt>
+        <dd>
+          <input type="password" name="cnfPassword" id="cnfPwd" required
+          onblur="confirmPassword()" placeholder="Confirm Password"
+          value="{% if userData.cnfPassword is defined %}{{ userData.cnfPassword }}{% endif %}"
+          >
+        </dd>
+        <dd id="cnfPwd_status" class="error-msg"></dd>
+        <dd class="error-msg">
+          {% if invalidPassword is defined %}{{ invalidPassword }}{% endif %}
+        </dd>
+        <dd>
+          <button name="resetPwd" id="submitBtn">Change Password</button>
+        </dd>
+      </dl>
+    </form>
+  </div>
+</div>
+{% endblock %}

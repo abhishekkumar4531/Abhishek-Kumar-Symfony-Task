@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User-Account{% endblock %}
+{% block regLink %}edit{% endblock %}
+{% block regName %}Edit profile{% endblock %}
+{% block loginLink %}logout{% endblock %}
+{% block loginValue %}Logout{% endblock %}
+
+{% block body %}
+  <div class="home-page">
+    <div class="user-identity mt-3">
+      <div>
+        <div class="user-identity">
+          <img src="/{{ userData.userImage }}" alt="">
+        </div>
+        <h3>
+          {{ userData.userFirstName }} {{ userData.userLastName }}
+        </h3>
+        <p>
+          {{ userData.userBio }}
+        </p>
+      </div>
+    </div>
+
+    <div class="user-post-container">
+      <div class="post-display" id="post-display-personal">
+        {% for post in fetchPosts %}
+          <div class="card-display">
+            <div class="post_by_user">
+            <div class = "img-link">
+              <a href="">
+                <img src = "/{{ userData.userImage }}" width = "200" height = "250">
+              </a>
+              <a href="">
+                <h6>{{ userData.userFirstName }} {{ userData.userLastName }}</h6>
+              </a>
+              </div>
+            </div>
+            <div>
+              <p>{{ post.postComment }}</p>
+            </div>
+            <div>
+              <img src="/{{ post.postFile }}">
+            </div>
+            <div class="bot-icons d-flex justify-content-around">
+            <a href="#"><span class="bi bi-heart"></span></a>
+            <a href="#"><span class="bi bi-chat"></span></a>
+            <a href="#"><span class="bi bi-share"></span></a>
+            </div>
+            <div class="share-icons d-flex justify-content-start">
+              <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=">
+                <span class="bi bi-facebook"></span>
+              </a>
+              <a target="_blank" href="https://www.twitter.com/share?url=">
+                <span class="bi bi-twitter"></span>
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit-Profile{% endblock %}
+{% block regLink %}edit{% endblock %}
+{% block regName %}Edit profile{% endblock %}
+{% block loginLink %}logout{% endblock %}
+{% block loginValue %}Logout{% endblock %}
+
+{% block body %}
+<form action="/edit" method="post" enctype="multipart/form-data">
+  <h1>Update your profile</h1>
+  <dl>
+    {% if userData is defined %}
+      <dd class="dd-img">
+        <img src="/{{ userData.userImage }}" alt="">
+      </dd>
+      <dt><label for="user_img">Update Your Profile-Image</label></dt>
+      <dd>
+        <input type="file" name="user_img" id="user_img">
+      </dd>
+      <dd class="error-msg">
+        {% if imageTypeError is defined %}{{ imageTypeError }}{% endif %}
+      </dd>
+      <dt><label for="user_bio">Edit/Add Your Bio</label></dt>
+      <dd>
+        <textarea name="user_bio" id="user_bio" cols="41" rows="3" placeholder="Add Your Bio" required
+        >{{ userData.userBio }}</textarea>
+      </dd>
+      <dt><label for="first_name">Your First-Name</label></dt>
+      <dd>
+        <input type="text" name="first_name" id="first_name" required onblur="checkFname()"
+        value = "{{ userData.userFirstName }}"
+        >
+      </dd>
+      <dd id="invalid_fname" class="error-msg"></dd>
+      <dt><label for="last_name">Your Last-Name</label></dt>
+      <dd>
+        <input type="text" name="last_name" id="last_name" required onblur="checkLname()"
+        value = "{{ userData.userLastName }}"
+        >
+      </dd>
+      <dd id="invalid_lname" class="error-msg"></dd>
+      <dt><label for="mobile">Your Mobile-Number</label></dt>
+      <dd>
+        <input type="text" name="user_mobile" id="mobile" required onblur="checkPhoneNo()"
+        value = "{{ userData.userMobile }}"
+        >
+      </dd>
+      <dd id="invalid_mobile" class="error-msg"></dd>
+      <dt><label for="email">Your Email-Address</label></dt>
+      <dd>
+        <input type="text" name="user_email" id="email" required onblur="checkEmailStatus()" readonly
+        value = "{{ userData.userEmail }}"
+        >
+      </dd>
+
+      <dd>
+        <button name="updateBtn" id="submitBtn">Update</button>
+      </dd>
+    {% endif %}
+    <dd>
+      <a href="/">Go to back</a>
+    </dd>
+  </dl>
+</form>
+{% endblock %}
